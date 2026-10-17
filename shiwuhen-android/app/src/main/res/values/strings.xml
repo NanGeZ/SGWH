@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">拾光无痕</string>
+    <string name="hint_url">粘贴分享链接，如 https://v.douyin.com/xxx</string>
+    <string name="btn_parse">解析</string>
+    <string name="btn_download">下载视频</string>
+    <string name="btn_download_audio">下载音频</string>
+    <string name="btn_convert_gif">转 GIF</string>
+    <string name="btn_convert_mp4">GIF 转 MP4</string>
+    <string name="btn_extract_frame">抽取关键帧</string>
+    <string name="btn_share_log">分享诊断日志</string>
+    <string name="btn_clear_log">清空日志</string>
+    <string name="status_ready">就绪</string>
+    <string name="status_parsing">解析中…</string>
+    <string name="status_downloading">下载中…</string>
+    <string name="status_converting">转换中…</string>
+    <string name="status_done">完成</string>
+    <string name="status_error">出错</string>
+    <string name="label_log">诊断日志</string>
+</resources>

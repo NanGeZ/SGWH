@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Shiwuhen" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="colorPrimary">#2F6BFF</item>
+        <item name="colorPrimaryDark">#1E4FD6</item>
+        <item name="colorAccent">#2F6BFF</item>
+    </style>
+</resources>
