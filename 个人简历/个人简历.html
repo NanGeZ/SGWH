@@ -189,9 +189,11 @@
       line-height: 1.85;
       display: flex;
       flex-wrap: wrap;
-      column-gap: 6mm;
+      column-gap: 4mm;
       row-gap: 0;
     }
+
+    .id-line .fill { min-width: 27mm; }
     .id-item { display: inline-flex; align-items: baseline; white-space: nowrap; }
     .fill {
       display: inline-block;
@@ -205,8 +207,8 @@
     .fill-md { min-width: 36mm; }
     .fill-grow { flex: 1; min-width: 30mm; margin-left: 3mm; }
     .photo-slot {
-      width: 22mm;
-      height: 30mm;
+      width: 24mm;
+      height: 32mm;
       border: 1px dashed #b3bbb5;
       background: #fcfdfc;
       display: flex;
@@ -214,6 +216,14 @@
       justify-content: center;
       color: var(--faint);
       font-size: 8.5pt;
+      overflow: hidden;
+    }
+
+    .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .doc-flow h2 {
@@ -301,17 +311,12 @@
           <span class="name-hint">（在此填写姓名）</span>
         </div>
         <div class="id-line">
-          <span class="id-item">求职意向：<span class="fill fill-md"></span></span>
           <span class="id-item">联系电话：<span class="fill"></span></span>
-          <span class="id-item">电子邮箱：<span class="fill fill-md"></span></span>
-        </div>
-        <div class="id-line">
-          <span class="id-item">微信号：<span class="fill"></span></span>
+          <span class="id-item">电子邮箱：<span class="fill"></span></span>
           <span class="id-item">现居城市：<span class="fill"></span></span>
-          <span class="id-item">作品集 / GitHub：<span class="fill fill-md"></span></span>
         </div>
       </div>
-      <div class="photo-slot">证件照</div>
+      <div class="photo-slot"><img src="证件照.jpg" alt="证件照"></div>
     </section>
 
     <section class="flow-block">
@@ -322,7 +327,7 @@
           <span class="entry-meta">在校时间：<span class="fill fill-sm"></span> — <span class="fill fill-sm"></span></span>
         </div>
         <ul>
-          <li>学历 / 专业：本科 · 茶学；GPA / 排名（选填）：<span class="fill fill-sm"></span></li>
+          <li>学历 / 专业：本科 · 茶学</li>
           <li>在校荣誉 / 证书（选填）：<span class="fill fill-grow"></span></li>
         </ul>
       </div>
