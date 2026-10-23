@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>茶叶审评复习 · 17 茶样</title>
+<style>
+:root{
+  --paper:#f7f3ea; --card:#fffdf8; --ink:#26221c; --muted:#6f665a;
+  --line:#e4dbc9; --line-soft:#efe8db;
+  --accent:#8a5a3b; --accent-2:#6b8e6e; --gold:#b8873a;
+  --bar:rgba(247,243,234,.88);
+  --shadow:0 1px 2px rgba(70,52,32,.05),0 10px 28px rgba(70,52,32,.07);
+  --green:#5f8a52; --white:#b08c3f; --black:#7a5545; --red:#a4453c; --oolong:#4f7c74;
+  --on-accent:#ffffff; --gold-btn:#8f6420;
+}
+[data-theme="dark"]{
+  --paper:#14120e; --card:#1d1a15; --ink:#eae3d5; --muted:#a29786;
+  --line:#332d24; --line-soft:#28231c;
+  --accent:#c8916a; --accent-2:#8fae90; --gold:#cfa65c;
+  --bar:rgba(20,18,14,.88);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);
+  --green:#8bb47c; --white:#d0aa5c; --black:#b08a72; --red:#d2796c; --oolong:#7fb3a8;
+  --on-accent:#17140f; --gold-btn:#cfa65c;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font:15px/1.72 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  transition:background .25s ease,color .25s ease;
+  background-image:radial-gradient(circle at 12% 8%, rgba(184,135,58,.045), transparent 45%),
+                   radial-gradient(circle at 88% 0%, rgba(107,142,110,.05), transparent 40%);
+  background-attachment:fixed;
+}
+h1,h2,h3,h4{font-family:"Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,"SimSun",serif; font-weight:600; letter-spacing:.5px; margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ============ 顶栏 ============ */
+.topbar{position:sticky;top:0;z-index:50;background:var(--bar);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar .inner{display:flex;align-items:center;gap:16px;height:58px}
+.brand{display:flex;align-items:center;gap:9px;font-family:"Songti SC",Georgia,serif;font-size:17px;font-weight:600;white-space:nowrap}
+.brand .seal{width:24px;height:24px;border-radius:6px;background:var(--accent);color:var(--on-accent);font-size:13px;display:flex;align-items:center;justify-content:center;font-family:"Songti SC",serif;letter-spacing:0}
+.tabs{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{
+  border:0;background:transparent;color:var(--muted);font:inherit;font-size:13.5px;
+  padding:7px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.18s;
+}
+.tabs button:hover{color:var(--ink);background:var(--line-soft)}
+.tabs button.on{background:var(--accent);color:var(--on-accent)}
+.icon-btn{
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+  width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:14px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:.18s;flex:0 0 auto
+}
+.icon-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ============ 通用 ============ */
+.view{display:none;padding:26px 0 80px}
+.view.on{display:block}
+.lede{color:var(--muted);font-size:14px;margin:6px 0 22px;max-width:70ch}
+.sec-title{display:flex;align-items:baseline;gap:10px;margin:34px 0 14px}
+.sec-title h2{font-size:19px}
+.sec-title .bar{flex:1;height:1px;background:var(--line)}
+.sec-title .tag{font-size:11.5px;color:var(--accent);letter-spacing:1px;font-family:Georgia,serif}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+
+/* ============ 工具条 ============ */
+.toolbar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px;margin-bottom:18px;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)
+}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-filter{
+  border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-size:13px;
+  padding:5px 12px;border-radius:999px;cursor:pointer;transition:.16s
+}
+.chip-filter:hover{border-color:var(--accent);color:var(--accent)}
+.chip-filter.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.act{
+  border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:13px;
+  padding:6px 12px;border-radius:9px;cursor:pointer;transition:.16s
+}
+.act:hover{border-color:var(--accent);color:var(--accent)}
+.toolbar .spacer{flex:1}
+.stats{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px;min-width:170px}
+.pbar{flex:1;height:6px;background:var(--line-soft);border-radius:999px;overflow:hidden;min-width:70px}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent-2),var(--accent));transition:width .35s}
+.only-toggle{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+.only-toggle input{accent-color:var(--accent)}
+
+/* ============ 茶样卡 ============ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(306px,1fr));gap:14px}
+.tea{padding:15px 16px 13px;position:relative;transition:.2s;overflow:hidden}
+.tea:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.chead{display:flex;align-items:flex-start;gap:10px}
+.idx{
+  font-family:Georgia,serif;font-size:12px;color:var(--accent);background:var(--line-soft);
+  width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:2px
+}
+.cname{flex:1;min-width:0}
+.cname h3{font-size:16.5px;line-height:1.4}
+.cmeta{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
+.cat{font-size:11px;padding:1px 8px;border-radius:6px;border:1px solid currentColor;letter-spacing:.5px;font-family:Georgia,"Songti SC",serif}
+.cat-green{color:var(--green)} .cat-white{color:var(--white)} .cat-black{color:var(--black)}
+.cat-red{color:var(--red)} .cat-oolong{color:var(--oolong)}
+.origin{font-size:12px;color:var(--muted)}
+.eye{
+  border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-size:11.5px;
+  padding:3px 9px;border-radius:7px;cursor:pointer;flex:0 0 auto;transition:.16s;letter-spacing:.5px
+}
+.eye:hover{color:var(--accent);border-color:var(--accent)}
+.factors{display:grid;gap:5px;margin:13px 0 0;padding:0}
+.factors>div{display:grid;grid-template-columns:40px 1fr;gap:9px;align-items:start}
+.factors dt{font-size:12.5px;color:var(--accent);font-weight:600;letter-spacing:1.5px;line-height:1.75}
+.factors dd{margin:0;font-size:13.6px;line-height:1.75;color:var(--ink);transition:filter .25s,opacity .25s}
+.note{
+  margin:11px 0 0;padding:8px 10px;font-size:12.5px;line-height:1.7;color:var(--muted);
+  background:var(--line-soft);border-radius:8px;border-left:2px solid var(--gold);transition:filter .25s,opacity .25s
+}
+.note b{color:var(--accent);font-weight:600;margin-right:5px;font-size:11.5px;letter-spacing:.5px}
+.know{display:flex;gap:6px;margin-top:11px;padding-top:10px;border-top:1px dashed var(--line)}
+.know button{
+  flex:1;border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-size:12px;
+  padding:4px 0;border-radius:7px;cursor:pointer;transition:.16s
+}
+.know button:hover{color:var(--ink)}
+.know button.on[data-k="2"]{background:var(--accent-2);border-color:var(--accent-2);color:var(--on-accent)}
+.know button.on[data-k="1"]{background:var(--gold-btn);border-color:var(--gold-btn);color:var(--on-accent)}
+.know button.on[data-k="0"]{background:var(--red);border-color:var(--red);color:var(--on-accent)}
+.tea.masked .factors dd,.tea.masked .note{filter:blur(5px);opacity:.42;user-select:none;pointer-events:none}
+.tea.masked{cursor:pointer}
+.tea.k2{border-left:3px solid var(--accent-2)}
+.tea.k1{border-left:3px solid var(--gold)}
+.tea.k0{border-left:3px solid var(--red)}
+
+/* ============ 专题：步骤 ============ */
+.steps{counter-reset:s;display:grid;gap:10px}
+.step{
+  display:grid;grid-template-columns:34px 1fr;gap:12px;padding:13px 15px;
+  background:var(--card);border:1px solid var(--line);border-radius:12px
+}
+.step::before{
+  counter-increment:s;content:counter(s);
+  font-family:Georgia,serif;font-size:13px;color:var(--on-accent);background:var(--accent);
+  width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:2px
+}
+.step h4{font-size:14.5px;margin-bottom:3px}
+.step p{margin:0;font-size:13.4px;color:var(--muted);line-height:1.7}
+
+/* ============ 表格 ============ */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:13.4px;min-width:520px}
+th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--line-soft);vertical-align:top}
+th{background:var(--line-soft);font-weight:600;font-size:12.5px;color:var(--ink);letter-spacing:.5px;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:color-mix(in srgb,var(--accent) 4%,transparent)}
+td.num{font-family:Georgia,serif;text-align:center;white-space:nowrap}
+.tier{font-family:Georgia,serif;font-weight:600;color:var(--accent);text-align:center;white-space:nowrap}
+.plus{color:var(--accent-2)} .minus{color:var(--red)}
+.hi{background:color-mix(in srgb,var(--gold) 16%,transparent);font-weight:600}
+.tbl-note{font-size:12.5px;color:var(--muted);margin:9px 0 0;line-height:1.7}
+
+/* ============ 计分器 ============ */
+.calc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.calc-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.calc-head .presets{display:flex;gap:6px;flex-wrap:wrap}
+.calc-head .presets button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.base-in{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.base-in input{
+  width:66px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
+  color:var(--ink);font:inherit;font-size:13px;text-align:center
+}
+.calc table{min-width:auto}
+.calc td{padding:7px 10px}
+.calc .w-in{width:58px;padding:4px 6px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink);font:inherit;font-size:13px;text-align:center}
+.calc select{padding:4px 7px;border:1px solid var(--line);border-radius:7px;background:var(--paper);color:var(--ink);font:inherit;font-size:13px}
+.out{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+.out .big{font-family:Georgia,serif;font-size:31px;font-weight:600;color:var(--accent);line-height:1}
+.out .unit{font-size:12px;color:var(--muted)}
+.out .warn{font-size:12.5px;color:var(--red)}
+.verdict{
+  margin-top:12px;padding:9px 12px;border-radius:9px;font-size:13px;
+  background:var(--line-soft);color:var(--muted);border-left:2px solid var(--accent-2)
+}
+
+/* ============ 术语 ============ */
+.gloss-search{
+  display:flex;align-items:center;gap:9px;margin-bottom:14px;padding:10px 14px;
+  background:var(--card);border:1px solid var(--line);border-radius:11px
+}
+.gloss-search input{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;font-size:14px;outline:none}
+.gloss-search input::placeholder{color:var(--muted)}
+.gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:10px}
+.gterm{padding:11px 13px;background:var(--card);border:1px solid var(--line);border-radius:11px;border-left:2px solid var(--line)}
+.gterm h4{font-size:13.8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.gterm .gf{font-size:10.5px;padding:1px 7px;border-radius:5px;border:1px solid currentColor;color:var(--muted);letter-spacing:.5px}
+.gterm p{margin:4px 0 0;font-size:12.8px;color:var(--muted);line-height:1.65}
+.empty{padding:34px;text-align:center;color:var(--muted);font-size:13.5px}
+
+.foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-size:12.3px;color:var(--muted);line-height:1.85}
+.foot b{color:var(--ink);font-weight:600}
+
+@media (max-width:640px){
+  .topbar .inner{flex-wrap:wrap;height:auto;gap:8px;padding:9px 0 0}
+  .brand span.tx{display:none}
+  .brand{flex:1}
+  .icon-btn{width:30px;height:30px}
+  .tabs{order:3;flex:0 0 100%;margin-left:0;padding-bottom:8px;gap:2px}
+  .tabs button{font-size:12.5px;padding:6px 10px}
+  .grid,.gloss-grid{grid-template-columns:1fr}
+  .view{padding:18px 0 60px}
+  .out .big{font-size:26px}
+  .tbl-wrap table{min-width:0}
+  th,td{padding:8px 9px;font-size:12.8px}
+  th,td.num{white-space:normal}
+}
+@media print{
+  .topbar,.toolbar,.know,.eye,.calc-head .presets,.gloss-search{display:none!important}
+  .view{display:block!important;page-break-before:always}
+  .tea.masked .factors dd,.tea.masked .note{filter:none!important;opacity:1!important}
+  body{background:#fff}
+  .card,.tea{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap inner">
+    <div class="brand"><span class="seal">茶</span><span class="tx">审评复习</span></div>
+    <nav class="tabs" id="tabs">
+      <button data-view="samples" class="on">17 茶样</button>
+      <button data-view="black">红茶审评</button>
+      <button data-view="score">占比与七档</button>
+      <button data-view="gloss">术语速查</button>
+    </nav>
+    <button class="icon-btn" id="themeBtn" title="切换深浅色">◐</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= 1. 茶样 ================= -->
+<section class="view on" id="view-samples">
+  <h1 style="font-size:22px">十七个茶样 · 五因子审评</h1>
+  <p class="lede">外形取自原始审评记录，汤色、香气、滋味、叶底按该茶类的工艺与品种特征补齐。点卡片任意处揭盲，按「熟 / 半 / 生」标记掌握程度，进度自动保存在本地。</p>
+
+  <div class="toolbar">
+    <div class="chips" id="filters">
+      <button class="chip-filter on" data-cat="全部">全部 17</button>
+      <button class="chip-filter" data-cat="绿茶">绿茶 7</button>
+      <button class="chip-filter" data-cat="白茶">白茶 2</button>
+      <button class="chip-filter" data-cat="乌龙茶">乌龙茶 3</button>
+      <button class="chip-filter" data-cat="红茶">红茶 3</button>
+      <button class="chip-filter" data-cat="黑茶">黑茶 2</button>
+    </div>
+    <div class="spacer"></div>
+    <button class="act" id="btnShuffle">洗牌</button>
+    <button class="act" id="btnReset">重置顺序</button>
+    <button class="act" id="btnMaskAll">全部遮住</button>
+    <label class="only-toggle"><input type="checkbox" id="onlyUnknown">只看没掌握的</label>
+  </div>
+
+  <div class="toolbar" style="margin-top:-8px">
+    <div class="stats">
+      <span id="statTxt">熟 0 / 17</span>
+      <span class="pbar"><i id="pbar"></i></span>
+    </div>
+    <div class="spacer"></div>
+    <span style="font-size:12.5px;color:var(--muted)">遮挡状态下单击卡片即可揭盲</span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ================= 2. 红茶专题 ================= -->
+<section class="view" id="view-black">
+  <h1 style="font-size:22px">红茶审评方法</h1>
+  <p class="lede">红茶的审评重点是「发酵是否到位、香气是否纯正、滋味浓强度与鲜爽度」。工夫红茶看条索与祁门香、滇红一类的甜香；红碎茶看颗粒重实度与「浓、强、鲜」。以下程序与参数依 GB/T 23776《茶叶感官审评方法》的通行做法整理。</p>
+
+  <div class="sec-title"><h2>一、审评程序</h2><span class="tag">PROCEDURE</span><span class="bar"></span></div>
+  <div class="steps">
+    <div class="step"><div><h4>把盘看外形</h4><p>取样约 100 g 于样盘中，双手回旋筛转使茶样分层，观察条索松紧粗细长短、色泽（乌润、金毫）、整碎、净度。条形红茶看「紧结乌润显金毫」，红碎茶看颗粒粗细与匀齐。</p></div></div>
+    <div class="step"><div><h4>称样</h4><p>名优红茶 3.0 g，大宗红茶 4.0 g（茶水比约 1∶50），投入 150 mL 审评杯。红碎茶同量，但取样务必混匀，避免碎末集中在一杯。</p></div></div>
+    <div class="step"><div><h4>冲泡</h4><p>沸水（100 ℃）高冲至杯满，立即加盖，计时浸泡 5 min。冲泡时按样序逐一注水，保证每杯时间一致。</p></div></div>
+    <div class="step"><div><h4>出汤</h4><p>到时将茶汤滤入 250 mL 审评碗，网匙（滤网）上的茶汤要一并倒入，杯内余汤沥尽——余汤与首泡汤的浓度差会直接错判滋味。</p></div></div>
+    <div class="step"><div><h4>嗅香气（热嗅 → 温嗅 → 冷嗅）</h4><p>热嗅辨纯度与有无异气（青、酸馊、烟焦）；温嗅（茶汤约 55 ℃）辨香型与浓度，祁门香、甜香、花果香、松烟香在此定；冷嗅辨持久性。每次嗅 2～3 秒即歇，久嗅会嗅觉疲劳。</p></div></div>
+    <div class="step"><div><h4>看汤色</h4><p>对光观察审评碗：色度（红艳、红浓、红亮、红暗）、明亮度、清浊。出汤后 2～3 min 内判断，久置会氧化加深、出现冷后浑。</p></div></div>
+    <div class="step"><div><h4>尝滋味</h4><p>用茶匙取 5 mL 左右含入口中回旋 2～3 秒，次杯与上杯之间漱口。辨浓淡、醇涩、鲜钝、甘甜、回甘与收敛性强弱。红茶重「鲜醇甘甜」，红碎茶重「浓、强、鲜」。</p></div></div>
+    <div class="step"><div><h4>看叶底</h4><p>叶底倒于叶底盘加水漂开，看嫩度（芽叶比例、柔软度）、匀度、色泽——红匀明亮为正，花青（青张）说明发酵不匀，暗褐多为发酵过度或陈化。</p></div></div>
+  </div>
+
+  <div class="sec-title"><h2>二、器具与参数</h2><span class="tag">TOOLS</span><span class="bar"></span></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>项目</th><th>工夫红茶 / 小种</th><th>红碎茶</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>审评杯</td><td class="num">150 mL 带盖</td><td class="num">150 mL 带盖</td><td>白瓷，杯口有齿缺便于出汤</td></tr>
+        <tr><td>审评碗</td><td class="num">250 mL</td><td class="num">250 mL</td><td>白色瓷碗，看汤色用</td></tr>
+        <tr><td>投茶量</td><td class="num">3.0 g（名优）/ 4.0 g（大宗）</td><td class="num">3.0 g</td><td>茶水比约 1∶50</td></tr>
+        <tr><td>水温</td><td class="num">100 ℃ 沸水</td><td class="num">100 ℃ 沸水</td><td>红茶需高水温激发香气</td></tr>
+        <tr><td>浸泡时间</td><td class="num">5 min</td><td class="num">5 min</td><td>到时即出汤，不可延时</td></tr>
+        <tr><td>其他</td><td class="num">天平、定时器、网匙、茶匙、叶底盘</td><td class="num">同左</td><td>另有吐茶桶、样盘</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tbl-note">注：投茶量按名优/大宗分级取值，各地培训班与企业标准可能略有差异（3 g 或 4 g），以所用标准版本与主考要求为准。</p>
+
+  <div class="sec-title"><h2>三、五因子要领（优 ↔ 劣）</h2><span class="tag">KEY POINTS</span><span class="bar"></span></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>因子</th><th>正常表现</th><th>常见缺陷</th><th>成因</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>外形</b></td>
+          <td>条索紧结、乌润显金毫、匀整、净；红碎茶颗粒紧结重实、匀齐</td>
+          <td>松扁、枯暗、花杂、多筋梗、碎末多</td>
+          <td>揉捻不足或萎凋失水不当；老叶混入；筛分不净</td>
+        </tr>
+        <tr>
+          <td><b>汤色</b></td>
+          <td>红艳明亮（金圈显）、红浓明亮、清澈</td>
+          <td>红暗、浑浊、沉淀多</td>
+          <td>发酵过度或陈化；揉切过重、碎末未滤净</td>
+        </tr>
+        <tr>
+          <td><b>香气</b></td>
+          <td>甜香 / 花果香 / 蜜糖香高锐持久；小种有松烟香；祁红有「祁门香」</td>
+          <td>青气、酸馊、烟焦、霉陈、闷味</td>
+          <td>发酵不足（青气）、发酵过度或渥堆不当（酸馊）、烘干温度过高（烟焦）、受潮陈化</td>
+        </tr>
+        <tr>
+          <td><b>滋味</b></td>
+          <td>鲜醇甘甜、醇厚顺滑、回甘明显；红碎茶浓强鲜爽</td>
+          <td>苦涩、粗淡、酸馊、水闷、收敛过强</td>
+          <td>茶多酚氧化不足（涩）、原料粗老（粗淡）、发酵不匀（酸）、冲泡过久（闷苦）</td>
+        </tr>
+        <tr>
+          <td><b>叶底</b></td>
+          <td>红匀明亮、柔软、芽叶成朵</td>
+          <td>花青（青张）、暗褐、硬薄、焦斑</td>
+          <td>发酵不匀；发酵过度；原料粗老；炒焙焦边</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec-title"><h2>四、三个必须分清的判断</h2><span class="tag">PITFALLS</span><span class="bar"></span></div>
+  <div class="grid">
+    <div class="card tea" style="cursor:default">
+      <h3 style="font-size:15px">冷后浑 ≠ 浑浊</h3>
+      <p style="margin:8px 0 0;font-size:13.4px;color:var(--muted);line-height:1.75">茶汤冷却后出现浅褐色乳状浑浊、加热即复溶，是大叶种红茶茶黄素与咖啡碱络合的正常现象（浓强度高的茶更明显），不作为浊度缺陷扣分。真正的浑浊透光看呈悬浮颗粒、加热不消失。</p>
+    </div>
+    <div class="card tea" style="cursor:default">
+      <h3 style="font-size:15px">金圈是光学现象</h3>
+      <p style="margin:8px 0 0;font-size:13.4px;color:var(--muted);line-height:1.75">碗壁与茶汤交界处的一圈金黄亮环，来自茶黄素，是汤色明亮度好的表现，不是杂质或油圈。</p>
+    </div>
+    <div class="card tea" style="cursor:default">
+      <h3 style="font-size:15px">红茶三类要分开评</h3>
+      <p style="margin:8px 0 0;font-size:13.4px;color:var(--muted);line-height:1.75">小种红茶重松烟香与桂圆汤；工夫红茶（祁红、滇红、宜兴红）重条索与甜香、醇厚度；红碎茶重颗粒重实度与滋味的浓强鲜——三者的外形与滋味权重不同，见「占比与七档」页。</p>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>依据</b>：GB/T 23776《茶叶感官审评方法》通行程序（把盘 → 称样 → 冲泡 → 出汤 → 嗅香 → 看汤色 → 尝滋味 → 看叶底）与评茶员培训教材的五因子用语体系。各版本标准与地方培训要求在投茶量、浸泡时间上可能略有差异，考试请以主考方公布的标准为准。
+  </div>
+</section>
+
+<!-- ================= 3. 占比与七档 ================= -->
+<section class="view" id="view-score">
+  <h1 style="font-size:22px">占比（权数）与七档制</h1>
+  <p class="lede">审评总分不是五项简单平均：各因子按茶类赋以不同权数（占比），再把每个因子的品质高低折算成「档」，加权求和。七档制就是这套「定档」的刻度——以标准样为 0，上下各三档。</p>
+
+  <div class="sec-title"><h2>一、七档制刻度</h2><span class="tag">7-LEVEL</span><span class="bar"></span></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th style="width:90px">档次</th><th style="width:110px">代号</th><th>含义</th><th>典型表述</th></tr></thead>
+      <tbody>
+        <tr><td class="tier plus">高</td><td class="num plus">+3</td><td>明显优于标准样</td><td>香气高锐持久，汤色红艳明亮，滋味鲜醇甘爽</td></tr>
+        <tr><td class="tier plus">较高</td><td class="num plus">+2</td><td>较优于标准样</td><td>香高持久，汤色红亮，滋味醇厚回甘</td></tr>
+        <tr><td class="tier plus">稍高</td><td class="num plus">+1</td><td>略优于标准样</td><td>尚高、尚亮、尚醇，无缺陷</td></tr>
+        <tr class="hi"><td class="tier">基准</td><td class="num">0</td><td>相当于标准样（对照样）</td><td>符合该级标准样的正常品质</td></tr>
+        <tr><td class="tier minus">稍低</td><td class="num minus">−1</td><td>略低于标准样</td><td>稍短、稍暗、稍淡，尚可接受</td></tr>
+        <tr><td class="tier minus">较低</td><td class="num minus">−2</td><td>较低于标准样</td><td>香短、汤暗、味淡或带轻微缺陷</td></tr>
+        <tr><td class="tier minus">低</td><td class="num minus">−3</td><td>明显低于标准样</td><td>有明显缺陷：青气、酸馊、烟焦、苦涩粗淡</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tbl-note">
+    要点：① 七档是<b>相对评分</b>，必须同时冲泡标准样对照，孤立给绝对分没有意义；② 逐因子定档，不是给整杯茶定一个档；
+    ③ 档次可含半档（如 +0.5）用于微差；④ 与「甲乙丙丁」的绝对档位制不同——后者按等级划分产品，七档制按与标准样的差距划分品质高低。
+  </p>
+
+  <div class="sec-title"><h2>二、各茶类权数（占比 %）</h2><span class="tag">WEIGHTS</span><span class="bar"></span></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>茶类（形态）</th><th class="num">外形</th><th class="num">汤色</th><th class="num">香气</th><th class="num">滋味</th><th class="num">叶底</th><th class="num">合计</th></tr></thead>
+      <tbody>
+        <tr><td>条形绿茶、红茶、白茶、黄茶、黑茶（名优）</td><td class="num">25</td><td class="num">10</td><td class="num">25</td><td class="num hi">30</td><td class="num">10</td><td class="num">100</td></tr>
+        <tr><td>红碎茶</td><td class="num">10</td><td class="num">10</td><td class="num">25</td><td class="num hi">35</td><td class="num">20</td><td class="num">100</td></tr>
+        <tr><td>乌龙茶（条索 / 颗粒）</td><td class="num">10</td><td class="num">5</td><td class="num hi">35</td><td class="num hi">35</td><td class="num">15</td><td class="num">100</td></tr>
+        <tr><td>紧压茶（沱 / 砖 / 饼）</td><td class="num">20</td><td class="num">10</td><td class="num">25</td><td class="num hi">35</td><td class="num">10</td><td class="num">100</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tbl-note">
+    记忆要点：<b>滋味几乎永远是最高权重（30～35）</b>，因为它是内质的主体；乌龙茶与红碎茶把外形压到 10——
+    条索/颗粒的观赏价值让位于香气与滋味；红碎茶叶底占 20，因为揉切后叶底的匀度直接反映原料与切筛工艺。
+    上表为评茶员培训与行业标准通行的取值，个别标准版本或赛事细则可能微调，以主考方文件为准。
+  </p>
+
+  <div class="sec-title"><h2>三、加权总分算例（可调）</h2><span class="tag">CALCULATOR</span><span class="bar"></span></div>
+  <div class="calc">
+    <div class="calc-head">
+      <div class="presets">
+        <button class="act on" data-preset="strip">条形红茶 / 绿茶</button>
+        <button class="act" data-preset="ctc">红碎茶</button>
+        <button class="act" data-preset="oolong">乌龙茶</button>
+        <button class="act" data-preset="compressed">紧压茶</button>
+      </div>
+      <div class="spacer" style="flex:1"></div>
+      <label class="base-in">标准样基准分 <input type="number" id="baseScore" value="90" min="0" max="100" step="1"></label>
+      <label class="base-in">每档分值 <input type="number" id="tierStep" value="3" min="0.5" max="10" step="0.5"></label>
+    </div>
+
+    <div class="tbl-wrap" style="border:0;background:transparent">
+      <table>
+        <thead><tr><th>因子</th><th class="num">权重 %</th><th>七档</th><th class="num">该项得分</th><th class="num">加权分</th></tr></thead>
+        <tbody id="calcBody"></tbody>
+      </table>
+    </div>
+
+    <div class="out">
+      <span class="big" id="total">—</span>
+      <span class="unit">加权总分</span>
+      <span class="warn" id="wWarn"></span>
+      <div style="flex:1"></div>
+      <span class="unit" id="wSum">权重合计 100%</span>
+    </div>
+    <div class="verdict" id="verdict"></div>
+  </div>
+  <p class="tbl-note">算法：某项得分 = 基准分 + 档次 × 每档分值；加权分 = 该项得分 × 权重 ÷ 100；总分 = 五项加权分之和。真实审评中档次由与标准样的对比得出，这里的滑块只是练手换算。</p>
+</section>
+
+<!-- ================= 4. 术语 ================= -->
+<section class="view" id="view-gloss">
+  <h1 style="font-size:22px">审评术语速查</h1>
+  <p class="lede">五因子常用语与缺陷语。描述时先定性（紧结 / 松扁）、再定量（尚、较、稍）、最后落到具体特征（显毫、糙米色、红匀）。</p>
+  <div class="gloss-search">
+    <input type="search" id="gq" placeholder="输入关键词，如 毫、暗、青、匀、红艳…">
+  </div>
+  <div class="gloss-grid" id="glossGrid"></div>
+</section>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------------- 数据：17 个茶样 ---------------- */
+  var TEAS = [
+    { id:1, name:'六安瓜片', cat:'绿茶', origin:'安徽六安',
+      shape:'形似瓜片、条索较紧结、绿起霜尚润、较匀整、净',
+      liquor:'嫩绿明亮，略泛黄绿',
+      aroma:'清高持久，带板栗香 / 清香，火功香不显',
+      taste:'鲜醇爽口，回甘明显，汤质较厚',
+      leaf:'绿亮、叶片肥厚单片、尚匀整，无芽无梗',
+      note:'唯一「摘叶不带芽梗」的绿茶，单片叶背卷成瓜子形；「起霜」是白毫脱落的白色粉状物，属正常品质标志，不是霉变。' },
+    { id:2, name:'天目湖白茶', cat:'绿茶', origin:'江苏溧阳',
+      shape:'黄绿润、匀整、净',
+      liquor:'嫩绿清澈，略泛浅黄',
+      aroma:'清鲜带嫩香 / 兰花香，纯正',
+      taste:'鲜爽甘醇，鲜味突出、苦涩极弱',
+      leaf:'玉白透绿、叶质柔软、匀整',
+      note:'属绿茶，用白叶一号（白化品种）按绿茶工艺制作，不是白茶类。白化期氨基酸含量高、酚氨比低，故鲜味强、苦涩弱；叶底「玉白」是品种特征。' },
+    { id:3, name:'西湖龙井', cat:'绿茶', origin:'浙江杭州',
+      shape:'扁平挺直、糙米色较润、匀整、净',
+      liquor:'嫩绿明亮（狮峰一带偏嫩黄）',
+      aroma:'豆香 / 栗香高锐持久',
+      taste:'鲜醇甘爽，回甘快，汤质细',
+      leaf:'嫩绿成朵、芽叶匀整、柔软',
+      note:'「糙米色」来自辉锅炒制，不是发酵变色；一味求「绿」反而可能杀青不足或保鲜不当。外形以扁平光滑、尖削挺直为上。' },
+    { id:4, name:'洞庭碧螺春', cat:'绿茶', origin:'江苏苏州',
+      shape:'条索纤细、卷曲、白毫隐翠、匀整、净',
+      liquor:'嫩绿清澈，明亮',
+      aroma:'花果香清高（旧称「吓煞人香」），纯正持久',
+      taste:'鲜爽甘醇，回味带花果香',
+      leaf:'嫩绿明亮、芽叶细嫩成朵、柔软',
+      note:'卷曲成螺、白毫隐翠；茶树与果树间作形成花果香。「毫多而汤不浊」是做工好的标志——毫浑与真浑浊要分开看。' },
+    { id:5, name:'太平猴魁', cat:'绿茶', origin:'安徽黄山',
+      shape:'尖形紧结、有红丝线、绿较润、匀整、净',
+      liquor:'杏绿明亮',
+      aroma:'兰花香高爽持久（「猴韵」）',
+      taste:'鲜爽醇厚，回甘绵长，汤质厚',
+      leaf:'嫩绿明亮、叶片肥厚成朵、可见红丝线',
+      note:'柿大茶品种，两叶抱一芽、扁平挺直；「红丝线」是主脉微红的品种与工艺特征，不算红梗缺陷。' },
+    { id:6, name:'白牡丹', cat:'白茶', origin:'福建',
+      shape:'一芽一叶、芽心较肥壮、绿较润、较匀整、净',
+      liquor:'橙黄清澈，明亮',
+      aroma:'毫香显，带清甜香',
+      taste:'清甜醇爽，汤质柔和',
+      leaf:'叶脉微红、叶张柔软、匀亮',
+      note:'一芽一（二）叶，毫心与叶张并存；叶底「叶脉微红」是白茶萎凋走水的正常特征，不是发酵过度。' },
+    { id:7, name:'白毫银针', cat:'白茶', origin:'福建',
+      shape:'全芽较肥壮、满披银毫、绿润、整、净',
+      liquor:'浅杏黄明亮（近无色）',
+      aroma:'毫香清高、纯净，无青气',
+      taste:'清鲜爽口、醇和回甘，浓度偏淡',
+      leaf:'芽头肥壮、银白明亮、匀整',
+      note:'全芽满披银毫，审评时不宜久浸——毫味久浸易「闷」，汤色也会转深。滋味浓度天然偏淡，判的是清鲜度与毫香的纯正度。' },
+    { id:8, name:'六堡茶', cat:'黑茶', origin:'广西',
+      shape:'条索较紧结、乌较润多梗、较匀整、净',
+      liquor:'红浓尚亮',
+      aroma:'陈香显，带槟榔香 / 松烟香，纯正无霉',
+      taste:'醇厚顺滑，回甘，陈味明显',
+      leaf:'红褐、暗褐柔软、尚匀整',
+      note:'后发酵黑茶，多梗是其风格而非缺陷（梗利于后期转化）。审评最忌霉气、堆味；槟榔香与陈香要分清「陈」与「霉」。' },
+    { id:9, name:'千两茶方块', cat:'黑茶', origin:'湖南',
+      shape:'方形较周正、棕红多梗较润、匀整、净',
+      liquor:'橙红明亮至橙黄',
+      aroma:'松烟香显，带陈香，纯正',
+      taste:'醇厚甘爽，带松烟香的回味',
+      leaf:'棕褐、粗老尚柔软、匀整多梗',
+      note:'千两茶（花卷茶）原为圆柱形紧压，切块后成方块样；松烟香来自七星灶焙火。审评看紧压松紧是否一致、有无烧心。' },
+    { id:10, name:'宜兴红茶', cat:'红茶', origin:'江苏宜兴',
+      shape:'条索紧结略弯、乌润显金毫、匀整、净',
+      liquor:'红艳明亮，金圈显',
+      aroma:'甜香 / 花果香高爽，纯正',
+      taste:'鲜醇甘甜，汤质柔顺',
+      leaf:'红匀尚明亮、柔软',
+      note:'条形工夫红茶。审评时外形看条索紧结度与金毫比例，内质以甜香的纯正度、滋味的鲜醇甘甜为主要判据。' },
+    { id:11, name:'滇红', cat:'红茶', origin:'云南',
+      shape:'条索较紧结略弯、乌润显金毫、匀整、净',
+      liquor:'红艳明亮，金圈明显（冷却易冷后浑）',
+      aroma:'甜香高浓，带蜜香 / 花香',
+      taste:'浓醇鲜爽，收敛性较强，回甘明显',
+      leaf:'红匀明亮、叶质肥厚柔软',
+      note:'云南大叶种，金毫特显、汤色浓艳。茶多酚含量高，涩感与收敛性比中小叶种强，属品种特征；冷后浑明显也是浓强度高的表现。' },
+    { id:12, name:'祁门红茶', cat:'红茶', origin:'安徽祁门',
+      shape:'条索较紧结、乌润多毫、匀齐、净',
+      liquor:'红艳明亮',
+      aroma:'「祁门香」——似花似果似蜜糖，高锐持久',
+      taste:'鲜醇甘甜，回味隽厚',
+      leaf:'红匀柔软明亮',
+      note:'审评重心在香气：祁门香要「高、锐、持久、带蜜糖与花果复合香」，青气（发酵不足）与酸馊（发酵过度）是主要扣分点。' },
+    { id:13, name:'普洱生茶', cat:'绿茶', origin:'云南',
+      shape:'条索粗壮带梗、乌褐有银毫、较匀整、净',
+      liquor:'黄绿至金黄明亮',
+      aroma:'清香 / 蜜香显，新茶略带青气',
+      taste:'浓强，苦涩明显但能化开，回甘生津快',
+      leaf:'黄绿、叶质柔韧肥厚、带梗',
+      note:'属晒青绿茶（未经后发酵），故与绿茶同列。审评看「苦能化、涩能退、回甘生津」，苦涩长期不化才是缺陷；带梗为云南大叶种采摘特征。' },
+    { id:14, name:'金山翠芽', cat:'绿茶', origin:'江苏镇江',
+      shape:'全芽较肥壮、扁平挺直、绿润有白毫、匀整、净',
+      liquor:'嫩绿明亮',
+      aroma:'清香带栗香，高爽持久',
+      taste:'鲜醇爽口，回甘',
+      leaf:'嫩绿明亮、芽头匀整、柔软',
+      note:'全芽扁平挺直，兼有龙井的扁平造型与白毫；审评注意芽头的肥壮度、扁平的挺直度与白毫保留量。' },
+    { id:15, name:'安溪铁观音', cat:'乌龙茶', origin:'福建安溪',
+      shape:'颗粒较紧结、深绿较润、较匀整、净',
+      liquor:'金黄明亮（「绿豆汤」色）',
+      aroma:'兰花香高长馥郁，「音韵」显',
+      taste:'醇厚鲜爽，回甘生津强，音韵明显',
+      leaf:'黄绿软亮、叶张肥厚、边缘红边（绿叶红镶边）',
+      note:'包揉成颗粒是工艺特征；「音韵」指兰花香 + 回甘生津 + 喉韵的综合感受。汤色以金黄泛绿为上，过红说明发酵偏重。' },
+    { id:16, name:'冻顶乌龙', cat:'乌龙茶', origin:'中国台湾',
+      shape:'芽头紧实、有粽叶蒂、深绿较润、净',
+      liquor:'蜜黄至金黄明亮',
+      aroma:'花香清扬，带轻焙火香',
+      taste:'醇和甘润，喉韵明显，涩感弱',
+      leaf:'绿亮、叶质柔韧、边缘红边',
+      note:'「粽叶蒂」是采摘带蒂、揉捻后芽头紧实形成的特征；中度发酵、轻焙火，故香气偏清扬、滋味醇和少涩，与闽南铁观音的「音韵」路径不同。' },
+    { id:17, name:'武夷岩茶', cat:'乌龙茶', origin:'福建武夷',
+      shape:'条索扭曲较紧结、乌褐尚润、较匀整、净',
+      liquor:'橙黄至深橙黄明亮',
+      aroma:'岩韵——花果香 / 焦糖香高锐持久',
+      taste:'醇厚甘爽，「岩骨花香」，回味长',
+      leaf:'软亮、绿叶红镶边、匀整',
+      note:'条索扭曲来自做青后的揉捻与焙火；「岩韵」表现为香气辛锐、滋味厚重、喉底回甘的骨鲠感。焙火轻重决定汤色深浅与火功香高低。' }
+  ];
+
+  var CAT_CLASS = { '绿茶':'green', '白茶':'white', '黑茶':'black', '红茶':'red', '乌龙茶':'oolong' };
+  var STORE_KEY = 'teaReview.v1';
+
+  /* ---------------- 本地状态 ---------------- */
+  function loadState() {
+    var d = { known:{}, order:null };
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (raw) { var p = JSON.parse(raw); if (p && typeof p === 'object') d = { known:p.known||{}, order:p.order||null }; }
+    } catch (e) {}
+    return d;
+  }
+  function saveState() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ known: state.known, order: state.order })); } catch (e) {}
+  }
+
+  var state = loadState();
+  if (!Array.isArray(state.order) || state.order.length !== TEAS.length) {
+    state.order = TEAS.map(function (t) { return t.id; });
+  }
+  var revealed = {};
+  var ui = { filter:'全部', onlyUnknown:false };
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+    });
+  }
+
+  /* ---------------- 渲染茶样卡 ---------------- */
+  var grid = $('#grid');
+
+  function renderCards() {
+    var list = state.order.map(function (id) {
+      for (var i = 0; i < TEAS.length; i++) if (TEAS[i].id === id) return TEAS[i];
+      return null;
+    }).filter(Boolean);
+
+    list = list.filter(function (t) {
+      if (ui.filter !== '全部' && t.cat !== ui.filter) return false;
+      if (ui.onlyUnknown && state.known[t.id] === 2) return false;
+      return true;
+    });
+
+    if (!list.length) {
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1">这个筛选下没有茶样了——换一类，或取消「只看没掌握的」。</div>';
+      return;
+    }
+
+    grid.innerHTML = list.map(function (t) {
+      var k = state.known[t.id];
+      var kCls = (k === 2 ? ' k2' : k === 1 ? ' k1' : k === 0 ? ' k0' : '');
+      var masked = !revealed[t.id];
+      var f = [['外形', t.shape], ['汤色', t.liquor], ['香气', t.aroma], ['滋味', t.taste], ['叶底', t.leaf]];
+      return '<article class="tea card' + (masked ? ' masked' : '') + kCls + '" data-id="' + t.id + '">' +
+        '<div class="chead">' +
+          '<span class="idx">' + (t.id < 10 ? '0' + t.id : t.id) + '</span>' +
+          '<div class="cname">' +
+            '<h3>' + esc(t.name) + '</h3>' +
+            '<div class="cmeta"><span class="cat cat-' + CAT_CLASS[t.cat] + '">' + esc(t.cat) + '</span>' +
+            '<span class="origin">' + esc(t.origin) + '</span></div>' +
+          '</div>' +
+          '<button class="eye" data-act="reveal" title="揭盲 / 遮住">' + (masked ? '揭' : '藏') + '</button>' +
+        '</div>' +
+        '<dl class="factors">' + f.map(function (row) {
+          return '<div><dt>' + row[0] + '</dt><dd>' + esc(row[1]) + '</dd></div>';
+        }).join('') + '</dl>' +
+        '<p class="note"><b>要点</b>' + esc(t.note) + '</p>' +
+        '<div class="know">' +
+          '<button data-k="2"' + (k === 2 ? ' class="on"' : '') + '>熟</button>' +
+          '<button data-k="1"' + (k === 1 ? ' class="on"' : '') + '>半</button>' +
+          '<button data-k="0"' + (k === 0 ? ' class="on"' : '') + '>生</button>' +
+        '</div>' +
+      '</article>';
+    }).join('');
+  }
+
+  function refreshStats() {
+    var total = TEAS.length;
+    var done = 0;
+    TEAS.forEach(function (t) { if (state.known[t.id] === 2) done++; });
+    $('#statTxt').textContent = '熟 ' + done + ' / ' + total;
+    $('#pbar').style.width = (done / total * 100) + '%';
+  }
+
+  function rerender() { renderCards(); refreshStats(); }
+
+  /* ---------------- 交互 ---------------- */
+  grid.addEventListener('click', function (e) {
+    var card = e.target.closest ? e.target.closest('.tea') : null;
+    if (!card) return;
+    var id = +card.dataset.id;
+    var kBtn = e.target.closest('[data-k]');
+    if (kBtn) {
+      var kv = +kBtn.dataset.k;
+      state.known[id] = (state.known[id] === kv ? undefined : kv);
+      if (state.known[id] === undefined) delete state.known[id];
+      saveState();
+      rerender();
+      return;
+    }
+    if (e.target.closest('[data-act="reveal"]')) {
+      if (revealed[id]) delete revealed[id]; else revealed[id] = true;
+      rerender();
+      return;
+    }
+    // 遮挡状态下，点卡片任意处揭盲
+    if (!revealed[id]) { revealed[id] = true; rerender(); }
+  });
+
+  $('#filters').addEventListener('click', function (e) {
+    var b = e.target.closest('.chip-filter');
+    if (!b) return;
+    ui.filter = b.dataset.cat;
+    $$('#filters .chip-filter').forEach(function (x) { x.classList.toggle('on', x === b); });
+    rerender();
+  });
+
+  $('#onlyUnknown').addEventListener('change', function (e) {
+    ui.onlyUnknown = e.target.checked;
+    rerender();
+  });
+
+  $('#btnShuffle').addEventListener('click', function () {
+    var a = state.order.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    state.order = a;
+    saveState();
+    revealed = {};
+    rerender();
+  });
+
+  $('#btnReset').addEventListener('click', function () {
+    state.order = TEAS.map(function (t) { return t.id; });
+    saveState();
+    revealed = {};
+    rerender();
+  });
+
+  $('#btnMaskAll').addEventListener('click', function () {
+    revealed = {};
+    rerender();
+  });
+
+  /* ---------------- 视图切换 ---------------- */
+  $('#tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-view]');
+    if (!b) return;
+    $$('#tabs button').forEach(function (x) { x.classList.toggle('on', x === b); });
+    $$('.view').forEach(function (v) { v.classList.toggle('on', v.id === 'view-' + b.dataset.view); });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ---------------- 主题 ---------------- */
+  var themeBtn = $('#themeBtn');
+  try {
+    var saved = localStorage.getItem('teaReview.theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  } catch (e) {}
+  themeBtn.addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', cur);
+    try { localStorage.setItem('teaReview.theme', cur); } catch (e) {}
+  });
+
+  /* ---------------- 计分器 ---------------- */
+  var WEIGHTS = {
+    strip:      { label:'条形红茶 / 绿茶', w:{ shape:25, liquor:10, aroma:25, taste:30, leaf:10 } },
+    ctc:        { label:'红碎茶',         w:{ shape:10, liquor:10, aroma:25, taste:35, leaf:20 } },
+    oolong:     { label:'乌龙茶',         w:{ shape:10, liquor:5,  aroma:35, taste:35, leaf:15 } },
+    compressed: { label:'紧压茶',         w:{ shape:20, liquor:10, aroma:25, taste:35, leaf:10 } }
+  };
+  var FACTORS = [
+    { k:'shape',  n:'外形' },
+    { k:'liquor', n:'汤色' },
+    { k:'aroma',  n:'香气' },
+    { k:'taste',  n:'滋味' },
+    { k:'leaf',   n:'叶底' }
+  ];
+  var TIERS = [3, 2, 1, 0, -1, -2, -3];
+  var calcBody = $('#calcBody');
+
+  calcBody.innerHTML = FACTORS.map(function (f) {
+    var opts = TIERS.map(function (t) {
+      var lab = t > 0 ? '+' + t : (t < 0 ? '−' + Math.abs(t) : '0');
+      return '<option value="' + t + '"' + (t === 0 ? ' selected' : '') + '>' + lab + '</option>';
+    }).join('');
+    return '<tr data-f="' + f.k + '">' +
+      '<td>' + f.n + '</td>' +
+      '<td class="num"><input class="w-in" type="number" min="0" max="100" step="1" value="0" data-w="' + f.k + '"></td>' +
+      '<td><select data-t="' + f.k + '">' + opts + '</select></td>' +
+      '<td class="num" data-s="' + f.k + '">—</td>' +
+      '<td class="num" data-p="' + f.k + '">—</td>' +
+    '</tr>';
+  }).join('');
+
+  function applyPreset(name) {
+    var w = WEIGHTS[name].w;
+    FACTORS.forEach(function (f) {
+      var el = calcBody.querySelector('[data-w="' + f.k + '"]');
+      if (el) el.value = w[f.k];
+    });
+    recalc();
+  }
+
+  function recalc() {
+    var base = parseFloat($('#baseScore').value) || 0;
+    var step = parseFloat($('#tierStep').value) || 0;
+    var sumW = 0, total = 0;
+    FACTORS.forEach(function (f) {
+      var wEl = calcBody.querySelector('[data-w="' + f.k + '"]');
+      var tEl = calcBody.querySelector('[data-t="' + f.k + '"]');
+      var w = parseFloat(wEl.value) || 0;
+      var tier = parseFloat(tEl.value) || 0;
+      var score = base + tier * step;
+      var part = score * w / 100;
+      sumW += w;
+      total += part;
+      calcBody.querySelector('[data-s="' + f.k + '"]').textContent = score.toFixed(1);
+      calcBody.querySelector('[data-p="' + f.k + '"]').textContent = part.toFixed(2);
+    });
+    $('#total').textContent = total.toFixed(2);
+    $('#wSum').textContent = '权重合计 ' + sumW + '%';
+    $('#wWarn').textContent = Math.abs(sumW - 100) > 0.01 ? '权重合计不等于 100%，总分不可直接比较' : '';
+
+    var verdict;
+    if (total >= 93) verdict = '明显优于标准样：可判 +3 档，属该级上档水平。';
+    else if (total >= 90) verdict = '不低于标准样：0 至 +1 档，正常或略优。';
+    else if (total >= 87) verdict = '略低于标准样：−1 档，尚在可接受范围。';
+    else if (total >= 84) verdict = '低于标准样：−2 档，存在可复现的品质差距。';
+    else verdict = '明显低于标准样：−3 档，需指出具体缺陷因子（优先看香气与滋味）。';
+    $('#verdict').textContent = '判读参考：' + verdict;
+  }
+
+  $$('.calc-head .presets button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('.calc-head .presets button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      applyPreset(b.dataset.preset);
+    });
+  });
+  calcBody.addEventListener('input', recalc);
+  calcBody.addEventListener('change', recalc);
+  $('#baseScore').addEventListener('input', recalc);
+  $('#tierStep').addEventListener('input', recalc);
+  applyPreset('strip');
+
+  /* ---------------- 术语速查 ---------------- */
+  var GLOSS = [
+    { t:'条索紧结', f:'外形', d:'茶条卷紧、体积小、身骨重实。松紧是条形茶外形第一判据。' },
+    { t:'显毫 / 金毫', f:'外形', d:'芽毫显露；红茶发酵后毫色转金，称金毫，是嫩度高、做工好的标志。' },
+    { t:'匀整 / 匀齐', f:'外形', d:'大小、长短、粗细一致，无大小混杂。' },
+    { t:'净 / 尚净', f:'外形', d:'不含梗、片、末、茶果等夹杂物。' },
+    { t:'整碎', f:'外形', d:'条索完整与断碎的比例，是外形四项（条索、色泽、整碎、净度）之一。' },
+    { t:'重实', f:'外形', d:'身骨重、手感沉实，通常与内含物充实、嫩度适中相关。' },
+    { t:'粗壮', f:'外形', d:'芽叶肥大饱满，多见于大叶种（如滇红、普洱）。' },
+    { t:'起霜', f:'外形', d:'绿茶表面白色粉状物，为白毫脱落附着，属正常品质标志（如六安瓜片）。' },
+    { t:'糙米色', f:'外形', d:'龙井炒制后呈黄绿带糙的色泽，非纯绿，是辉锅火功到位的表现。' },
+    { t:'乌润', f:'外形', d:'红茶、黑茶色泽黑褐而油润有光，与「枯暗」相对。' },
+    { t:'露筋', f:'外形', d:'叶脉突出外露，多为原料粗老或揉捻不当。' },
+    { t:'红丝线', f:'外形', d:'叶主脉呈微红色（如太平猴魁），属品种与工艺特征，不是红梗缺陷。' },
+    { t:'粽叶蒂', f:'外形', d:'采摘带蒂、揉捻后芽头紧实成蒂状（如冻顶乌龙），是采摘方式的特征。' },
+
+    { t:'明亮', f:'汤色', d:'茶汤透亮有光泽。汤色三项：色度、亮度、清浊度。' },
+    { t:'红艳', f:'汤色', d:'红茶汤色红而鲜艳明亮，为上品表现。' },
+    { t:'金圈', f:'汤色', d:'茶汤与碗壁交界处的金黄亮环，源于茶黄素，是明亮度好的表现。' },
+    { t:'红浓', f:'汤色', d:'色深而浓，多见于大叶种红茶、后发酵黑茶，需同时看是否「亮」。' },
+    { t:'嫩绿 / 杏绿', f:'汤色', d:'绿茶汤色偏嫩绿或黄绿；杏绿多用于名优绿茶与白茶。' },
+    { t:'浅杏黄', f:'汤色', d:'白毫银针等全芽白茶的典型汤色，近于无色而透明。' },
+    { t:'橙黄', f:'汤色', d:'乌龙茶、紧压茶的常见汤色，偏橙而明亮。' },
+    { t:'冷后浑', f:'汤色', d:'茶汤冷却后出现浅褐乳状浑浊、加热复溶，为茶黄素与咖啡碱络合，非缺陷。' },
+    { t:'浑浊', f:'汤色', d:'透光见悬浮颗粒、加热不消，多因碎末未滤净或微生物污染。' },
+    { t:'暗', f:'汤色', d:'汤色发暗无光，多为发酵过度、陈化或杀青不匀。' },
+
+    { t:'高锐', f:'香气', d:'香气浓度高且有穿透力（「冲」），是优质香气的第一层描述。' },
+    { t:'持久', f:'香气', d:'香气留存时间长，冷嗅仍有余香。' },
+    { t:'纯正', f:'香气', d:'香型正常、无夹杂异气，是基本合格线。' },
+    { t:'馥郁', f:'香气', d:'香气浓盛丰满，多用于乌龙茶与高档红茶。' },
+    { t:'祁门香', f:'香气', d:'祁门红茶特有的似花、似果、似蜜糖的复合香，高锐持久。' },
+    { t:'毫香', f:'香气', d:'白毫带来的清鲜香，白茶（银针、白牡丹）的典型香型。' },
+    { t:'陈香', f:'香气', d:'黑茶后发酵形成的陈醇香，须与霉气区分。' },
+    { t:'松烟香', f:'香气', d:'焙火或干燥时松柴烟气渗入形成，见于小种红茶、安化千两茶。' },
+    { t:'音韵 / 岩韵', f:'香气', d:'铁观音与武夷岩茶的地域+品种综合感受，表现为香高、味厚、喉底回甘。' },
+    { t:'青气', f:'香气', d:'类似青草的生青气，多因杀青不足、发酵不足或萎凋不当。' },
+    { t:'酸馊', f:'香气', d:'发酵过度或渥堆温度失控产生的酸败气味，属严重缺陷。' },
+    { t:'烟焦', f:'香气', d:'烘干或焙火温度过高产生的焦糊烟味。' },
+    { t:'霉气', f:'香气', d:'受潮霉变气味，不可与陈香混淆。' },
+
+    { t:'鲜醇', f:'滋味', d:'鲜爽而醇和，绿茶的理想滋味。' },
+    { t:'醇厚', f:'滋味', d:'茶汤厚实、口感饱满而不刺激。' },
+    { t:'浓强', f:'滋味', d:'浓度与刺激性都强，红碎茶「浓、强、鲜」的核心。' },
+    { t:'回甘', f:'滋味', d:'咽下后口腔由苦转甜的感受，与「生津」（两颊舌底分泌唾液）常并提。' },
+    { t:'收敛性', f:'滋味', d:'口腔黏膜的收紧感，来自茶多酚，大叶种红茶、生普较强。' },
+    { t:'苦涩', f:'滋味', d:'苦与涩。适度苦涩能化开属正常；久不化、留滞舌面为缺陷。' },
+    { t:'粗淡', f:'滋味', d:'滋味粗涩而淡薄，多为原料粗老、内含物不足。' },
+    { t:'水味', f:'滋味', d:'茶味淡薄近于水，多因冲泡过久、多次冲泡或品质低劣。' },
+
+    { t:'柔软', f:'叶底', d:'叶质柔软有弹性，嫩度好的表现。' },
+    { t:'软亮', f:'叶底', d:'叶质柔软且色泽明亮，乌龙茶优质叶底的常用语。' },
+    { t:'成朵', f:'叶底', d:'芽叶完整舒展如花朵，多见于名优绿茶。' },
+    { t:'红匀', f:'叶底', d:'红茶发酵均匀，叶底色泽红而一致。' },
+    { t:'绿叶红镶边', f:'叶底', d:'乌龙茶做青形成的叶缘红、叶心绿，是半发酵适度的标志。' },
+    { t:'花青 / 青张', f:'叶底', d:'叶底带青绿斑块，说明发酵或做青不匀。' },
+    { t:'暗褐', f:'叶底', d:'叶底深暗褐，多因发酵过度、陈化或焙火过重。' },
+    { t:'硬薄', f:'叶底', d:'叶质硬而薄，原料粗老或生长过快。' },
+    { t:'焦斑', f:'叶底', d:'叶底有焦黑斑点，杀青、炒制或焙火温度过高。' }
+  ];
+
+  var glossGrid = $('#glossGrid');
+  function renderGloss() {
+    var q = ($('#gq').value || '').trim().toLowerCase();
+    var list = GLOSS.filter(function (g) {
+      if (!q) return true;
+      return (g.t + g.f + g.d).toLowerCase().indexOf(q) !== -1;
+    });
+    if (!list.length) {
+      glossGrid.innerHTML = '<div class="empty" style="grid-column:1/-1">没找到「' + esc(q) + '」相关的术语，换个词试试。</div>';
+      return;
+    }
+    glossGrid.innerHTML = list.map(function (g) {
+      return '<div class="gterm" style="border-left-color:var(--gold)">' +
+        '<h4>' + esc(g.t) + '<span class="gf">' + esc(g.f) + '</span></h4>' +
+        '<p>' + esc(g.d) + '</p></div>';
+    }).join('');
+  }
+  $('#gq').addEventListener('input', renderGloss);
+
+  /* ---------------- 初始化 ---------------- */
+  rerender();
+  renderGloss();
+})();
+</script>
+</body>
+</html>
